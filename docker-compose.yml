@@ -1,0 +1,16 @@
+services:
+  db:
+    environment:
+      POSTGRES_PASSWORD: pastgres
+      POSTGRES_USER: postgres
+
+    image: postgres:17-alpine
+
+    ports:
+      - 5432:5432
+
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+volumes:
+  db_volume:
