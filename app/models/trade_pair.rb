@@ -33,7 +33,7 @@ class TradePair < ApplicationRecord
       
       # Verifica se existe um pareamento atual com lucro maior
       current_pair = TradePair.joins(:sell_trade)
-                             .where(sell_trades: { 
+                             .where(sell_trade: { 
                                cryptocurrency: trade.cryptocurrency,
                                quantity: trade.quantity,
                                unit_price: best_sell.unit_price..
@@ -58,7 +58,7 @@ class TradePair < ApplicationRecord
       
       # Verifica se existe um pareamento atual com lucro maior
       current_pair = TradePair.joins(:buy_trade)
-                             .where(buy_trades: { 
+                             .where(buy_trade: { 
                                cryptocurrency: trade.cryptocurrency,
                                quantity: trade.quantity,
                                unit_price: ..best_buy.unit_price
