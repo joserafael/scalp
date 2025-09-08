@@ -21,4 +21,10 @@ Rails.application.routes.draw do
   
   # Dashboard
   get 'dashboard', to: 'dashboard#index'
+  
+  # Handle Chrome DevTools requests
+  get '/.well-known/appspecific/com.chrome.devtools.json', to: proc { [404, {}, ['']] }
+  
+  # Handle Vite client requests (ignore silently)
+  get '/@vite/client', to: proc { [404, {}, ['']] }
 end
