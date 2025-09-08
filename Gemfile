@@ -10,6 +10,7 @@ gem 'pg'
 gem 'puma'
 gem 'rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
+gem 'rails-ujs'
 
 group :development, :test do
   gem 'rspec-rails'
