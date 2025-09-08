@@ -125,6 +125,8 @@ docker-compose down
 
 ## Uso
 
+![Scalp Trading](1.png)
+
 ### Acessando a aplicação
 
 1. **Dashboard**: http://localhost:3000 - Visão geral das operações
@@ -161,6 +163,7 @@ bundle exec rspec spec/models/
 bundle exec rspec spec/controllers/
 ```
 
+![Estrutura do Projeto](2.png)
 ### Estrutura do projeto
 
 ```
