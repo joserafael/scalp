@@ -126,7 +126,6 @@
                         <% end %>
                         <% if trade.open? %>
                           <%= link_to trade_path(trade), 
-                                    method: :delete, 
                                     class: "btn btn-outline-danger btn-sm",
                                     data: { method: "delete", confirm: "Tem certeza que deseja excluir esta operação?" } do %>
                             <i class="bi bi-trash"></i>
@@ -191,11 +190,11 @@
                         <%= link_to trade_path(trade), class: "btn btn-outline-primary btn-sm" do %>
                           <i class="bi bi-eye"></i>
                         <% end %>
-                        <%= link_to trade_path(trade), method: :delete, 
+                        <%= link_to trade_path(trade), 
                                     class: "btn btn-outline-danger btn-sm",
                                     data: { 
                                       confirm: "Tem certeza que deseja remover esta operação?",
-                                      method: :delete
+                                      method: "delete"
                                     } do %>
                           <i class="bi bi-trash"></i>
                         <% end %>

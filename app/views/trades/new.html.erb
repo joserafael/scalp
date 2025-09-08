@@ -52,8 +52,8 @@
             
             <div class="col-md-6">
               <div class="mb-3">
-                <%= form.label :price, "Preço (USD)", class: "form-label" %>
-                <%= form.number_field :price, 
+                <%= form.label :unit_price, "Preço Unitário (USD)", class: "form-label" %>
+                <%= form.number_field :unit_price, 
                     step: 0.01, 
                     min: 0.01,
                     class: "form-control", 
@@ -67,12 +67,16 @@
           </div>
           
           <div class="mb-3">
-            <div class="form-check">
-              <%= form.check_box :active, class: "form-check-input", checked: true %>
-              <%= form.label :active, "Operação ativa", class: "form-check-label" %>
-            </div>
+            <%= form.label :total_value, "Valor Total (USD)", class: "form-label" %>
+            <%= form.number_field :total_value, 
+                step: 0.01, 
+                min: 0.01,
+                class: "form-control", 
+                required: true,
+                placeholder: "0.00",
+                readonly: true %>
             <small class="form-text text-muted">
-              Operações inativas não participam do matching automático.
+              Calculado automaticamente: Quantidade × Preço Unitário
             </small>
           </div>
           
@@ -135,4 +139,22 @@
     });
   }, false);
 })();
+
+// Cálculo automático do valor total
+function calculateTotalValue() {
+  const quantity = parseFloat(document.getElementById('trade_quantity').value) || 0;
+  const unitPrice = parseFloat(document.getElementById('trade_unit_price').value) || 0;
+  const totalValue = quantity * unitPrice;
+  document.getElementById('trade_total_value').value = totalValue.toFixed(2);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const quantityField = document.getElementById('trade_quantity');
+  const unitPriceField = document.getElementById('trade_unit_price');
+  
+  if (quantityField && unitPriceField) {
+    quantityField.addEventListener('input', calculateTotalValue);
+    unitPriceField.addEventListener('input', calculateTotalValue);
+  }
+});
 </script>

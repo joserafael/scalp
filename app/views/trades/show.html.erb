@@ -30,11 +30,11 @@
               </tr>
               <tr>
                 <td class="fw-bold">Preço:</td>
-                <td>$<%= number_with_precision(@trade.price, precision: 2) %></td>
+                <td>$<%= number_with_precision(@trade.unit_price, precision: 2) %></td>
               </tr>
               <tr>
                 <td class="fw-bold">Valor Total:</td>
-                <td class="fw-bold">$<%= number_with_precision(@trade.quantity * @trade.price, precision: 2) %></td>
+                <td class="fw-bold">$<%= number_with_precision(@trade.quantity * @trade.unit_price, precision: 2) %></td>
               </tr>
             </table>
           </div>
@@ -53,8 +53,8 @@
               <tr>
                 <td class="fw-bold">Ativa:</td>
                 <td>
-                  <span class="badge bg-<%= @trade.active? ? 'success' : 'secondary' %>">
-                    <%= @trade.active? ? 'Sim' : 'Não' %>
+                  <span class="badge bg-<%= @trade.open? ? 'success' : 'secondary' %>">
+                    <%= @trade.open? ? 'Sim' : 'Não' %>
                   </span>
                 </td>
               </tr>
@@ -76,9 +76,8 @@
           <%= link_to "Voltar", trades_path, class: "btn btn-secondary" %>
           <% if @trade.status == 'open' %>
             <%= link_to "Excluir", trade_path(@trade), 
-                method: :delete, 
                 class: "btn btn-danger",
-                confirm: "Tem certeza que deseja excluir esta operação?" %>
+                data: { method: "delete", confirm: "Tem certeza que deseja excluir esta operação?" } %>
           <% end %>
         </div>
       </div>
@@ -142,7 +141,7 @@
                   <small>#<%= trade.id %></small>
                 </div>
                 <div class="text-end">
-                  <small class="d-block">$<%= number_with_precision(trade.price, precision: 2) %></small>
+                  <small class="d-block">$<%= number_with_precision(trade.unit_price, precision: 2) %></small>
                   <small class="text-muted"><%= trade.created_at.strftime("%d/%m") %></small>
                 </div>
               </div>
