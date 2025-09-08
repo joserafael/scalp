@@ -101,7 +101,7 @@
                 <%= other_trade.operation_type == 'buy' ? 'Compra' : 'Venda' %>
               </span>
             </p>
-            <p><strong>Preço do par:</strong> $<%= number_with_precision(other_trade.price, precision: 2) %></p>
+            <p><strong>Preço do par:</strong> $<%= number_with_precision(other_trade.unit_price, precision: 2) %></p>
             <% if pair.profit %>
               <p><strong>Lucro:</strong> 
                 <span class="fw-bold text-<%= pair.profit >= 0 ? 'success' : 'danger' %>">
