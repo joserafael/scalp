@@ -2,16 +2,21 @@ class TradesController < ApplicationController
   before_action :set_trade, only: [:show, :destroy]
   
   def index
-    @trades = Trade.includes(:cryptocurrency, :trade_pair)
+    @trades = Trade.includes(:cryptocurrency)
                   .order(created_at: :desc)
     
     @open_trades = Trade.open.includes(:cryptocurrency)
-    @matched_trades = Trade.matched.includes(:cryptocurrency, :trade_pair)
+    @matched_trades = Trade.matched.includes(:cryptocurrency)
     @trade_pairs = TradePair.includes(:buy_trade, :sell_trade)
                            .order(created_at: :desc)
     
     @total_profit = @trade_pairs.sum(:profit)
     @cryptocurrencies = Cryptocurrency.active.order(:name)
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: { trades: @trades.map { |trade| trade_json(trade) } } }
+    end
   end
   
   def show
@@ -31,7 +36,7 @@ class TradesController < ApplicationController
     respond_to do |format|
       if @trade.save
         # Executar matching automático
-        TradeMatchingService.new.match_trades
+        TradeMatchingService.new(@trade).perform
         
         format.html { redirect_to trades_path, notice: 'Operação criada com sucesso!' }
         format.json { render json: { status: 'success', trade: trade_json(@trade), message: 'Operação criada com sucesso!' } }
