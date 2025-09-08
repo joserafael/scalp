@@ -85,6 +85,7 @@
                 <tr>
                   <th>ID</th>
                   <th>Criptomoeda</th>
+                  <th>Usuário</th>
                   <th>Tipo</th>
                   <th>Quantidade</th>
                   <th>Preço Unitário</th>
@@ -101,6 +102,15 @@
                     <td>
                       <strong><%= trade.cryptocurrency.symbol %></strong><br>
                       <small class="text-muted"><%= trade.cryptocurrency.name %></small>
+                    </td>
+                    <td>
+                      <% if trade.user %>
+                        <span class="badge bg-info">
+                          <i class="bi bi-person"></i> <%= trade.user.name %>
+                        </span>
+                      <% else %>
+                        <span class="text-muted">-</span>
+                      <% end %>
                     </td>
                     <td>
                       <span class="badge <%= trade.buy? ? 'bg-success' : 'bg-danger' %>">
@@ -164,6 +174,7 @@
               <thead>
                 <tr>
                   <th>Criptomoeda</th>
+                  <th>Usuário</th>
                   <th>Tipo</th>
                   <th>Quantidade</th>
                   <th>Preço Unitário</th>
@@ -178,6 +189,15 @@
                     <td>
                       <strong><%= trade.cryptocurrency.symbol %></strong><br>
                       <small class="text-muted"><%= trade.cryptocurrency.name %></small>
+                    </td>
+                    <td>
+                      <% if trade.user %>
+                        <span class="badge bg-info">
+                          <i class="bi bi-person"></i> <%= trade.user.name %>
+                        </span>
+                      <% else %>
+                        <span class="text-muted">-</span>
+                      <% end %>
                     </td>
                     <td>
                       <span class="badge <%= trade.buy? ? 'bg-success' : 'bg-danger' %>">
@@ -232,6 +252,7 @@
                   <th>Criptomoeda</th>
                   <th>Compra</th>
                   <th>Venda</th>
+                  <th>Usuários</th>
                   <th>Quantidade</th>
                   <th>Lucro</th>
                   <th>Data do Pareamento</th>
@@ -251,6 +272,16 @@
                     <td>
                       <span class="badge bg-danger">Venda</span><br>
                       <small>R$ <%= number_with_precision(pair.sell_trade.unit_price, precision: 2) %></small>
+                    </td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <% if pair.buy_trade.user %>
+                          <small><strong>Compra:</strong> <%= pair.buy_trade.user.name %></small>
+                        <% end %>
+                        <% if pair.sell_trade.user %>
+                          <small><strong>Venda:</strong> <%= pair.sell_trade.user.name %></small>
+                        <% end %>
+                      </div>
                     </td>
                     <td><%= number_with_precision(pair.buy_trade.quantity, precision: 2) %></td>
                     <td>
