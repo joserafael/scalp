@@ -13,6 +13,8 @@ Uma aplicação Ruby on Rails para gerenciamento de operações de scalp trading
 
 ## Pré-requisitos
 
+> **Nota:** Não é necessário criar usuários manualmente. O comando `rails db:seed` adiciona automaticamente 5 usuários de exemplo. Durante o trading, o sistema atribui um `user_id` aleatório às operações.
+
 Antes de instalar, certifique-se de ter os seguintes softwares instalados:
 
 - **Ruby** 3.3.0 ou superior
