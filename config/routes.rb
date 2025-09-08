@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     end
   end
   
+  # Users routes
+  resources :users, only: [:index]
+  
   # Dashboard
   get 'dashboard', to: 'dashboard#index'
   
