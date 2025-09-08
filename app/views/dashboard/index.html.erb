@@ -129,7 +129,7 @@
                         <%= trade.buy? ? 'Compra' : 'Venda' %>
                       </span>
                     </td>
-                    <td><%= number_with_precision(trade.quantity, precision: 8) %></td>
+                    <td><%= number_with_precision(trade.quantity, precision: 2) %></td>
                     <td>R$ <%= number_with_precision(trade.unit_price, precision: 2) %></td>
                     <td>
                       <span class="badge <%= trade.open? ? 'bg-warning' : 'bg-success' %>">

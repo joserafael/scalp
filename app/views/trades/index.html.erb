@@ -50,6 +50,10 @@
   </div>
 </div>
 
+<% content_for :javascript do %>
+  <%= javascript_include_tag "trades", defer: true %>
+<% end %>
+
 <!-- Tabs para diferentes visualizações -->
 <ul class="nav nav-tabs" id="tradeTabs" role="tablist">
   <li class="nav-item" role="presentation">
@@ -104,7 +108,7 @@
                         <%= trade.buy? ? 'Compra' : 'Venda' %>
                       </span>
                     </td>
-                    <td><%= number_with_precision(trade.quantity, precision: 8) %></td>
+                    <td><%= number_with_precision(trade.quantity, precision: 2) %></td>
                     <td>R$ <%= number_with_precision(trade.unit_price, precision: 2) %></td>
                     <td>R$ <%= number_with_precision(trade.total_value, precision: 2) %></td>
                     <td>
@@ -181,7 +185,7 @@
                         <%= trade.buy? ? 'Compra' : 'Venda' %>
                       </span>
                     </td>
-                    <td><%= number_with_precision(trade.quantity, precision: 8) %></td>
+                    <td><%= number_with_precision(trade.quantity, precision: 2) %></td>
                     <td>R$ <%= number_with_precision(trade.unit_price, precision: 2) %></td>
                     <td>R$ <%= number_with_precision(trade.total_value, precision: 2) %></td>
                     <td><%= trade.created_at.strftime('%d/%m/%Y %H:%M') %></td>
@@ -248,7 +252,7 @@
                       <span class="badge bg-danger">Venda</span><br>
                       <small>R$ <%= number_with_precision(pair.sell_trade.unit_price, precision: 2) %></small>
                     </td>
-                    <td><%= number_with_precision(pair.buy_trade.quantity, precision: 8) %></td>
+                    <td><%= number_with_precision(pair.buy_trade.quantity, precision: 2) %></td>
                     <td>
                       <span class="badge bg-success fs-6">
                         <i class="bi bi-currency-dollar"></i>

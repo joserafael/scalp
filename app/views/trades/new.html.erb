@@ -52,7 +52,7 @@
             
             <div class="col-md-6">
               <div class="mb-3">
-                <%= form.label :unit_price, "Preço Unitário (USD)", class: "form-label" %>
+                <%= form.label :unit_price, "Preço Unitário (R$)", class: "form-label" %>
                 <%= form.number_field :unit_price, 
                     step: 0.01, 
                     min: 0.01,
@@ -67,7 +67,7 @@
           </div>
           
           <div class="mb-3">
-            <%= form.label :total_value, "Valor Total (USD)", class: "form-label" %>
+            <%= form.label :total_value, "Valor Total (R$)", class: "form-label" %>
             <%= form.number_field :total_value, 
                 step: 0.01, 
                 min: 0.01,
