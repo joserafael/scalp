@@ -24,3 +24,18 @@ cryptocurrencies.each do |crypto_data|
 end
 
 puts "Criadas #{Cryptocurrency.count} criptomoedas"
+
+# Criar usuários
+users = [
+  { name: 'João Silva' },
+  { name: 'Maria Santos' },
+  { name: 'Pedro Oliveira' },
+  { name: 'Ana Costa' },
+  { name: 'Carlos Ferreira' }
+]
+
+users.each do |user_data|
+  User.find_or_create_by!(name: user_data[:name])
+end
+
+puts "Criados #{User.count} usuários"

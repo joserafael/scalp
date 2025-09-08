@@ -1,5 +1,6 @@
 class Trade < ApplicationRecord
   belongs_to :cryptocurrency
+  belongs_to :user, optional: true
   has_one :buy_pair, class_name: 'TradePair', foreign_key: 'buy_trade_id', dependent: :destroy
   has_one :sell_pair, class_name: 'TradePair', foreign_key: 'sell_trade_id', dependent: :destroy
   

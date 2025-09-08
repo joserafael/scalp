@@ -32,6 +32,7 @@ class TradesController < ApplicationController
   
   def create
     @trade = Trade.new(trade_params)
+    @trade.user_id = rand(1..5)  # Atribuir user_id aleatório entre 1 e 5
     
     respond_to do |format|
       if @trade.save

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_08_115803) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_08_212507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,13 +45,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_08_115803) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["cryptocurrency_id", "operation_type", "status"], name: "idx_on_cryptocurrency_id_operation_type_status_cac4822ae8"
     t.index ["cryptocurrency_id"], name: "index_trades_on_cryptocurrency_id"
     t.index ["operation_type"], name: "index_trades_on_operation_type"
     t.index ["status"], name: "index_trades_on_status"
+    t.index ["user_id"], name: "index_trades_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "trade_pairs", "trades", column: "buy_trade_id"
   add_foreign_key "trade_pairs", "trades", column: "sell_trade_id"
   add_foreign_key "trades", "cryptocurrencies"
+  add_foreign_key "trades", "users"
 end
