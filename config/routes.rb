@@ -10,5 +10,15 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "dashboard#index"
+  
+  # Trading routes
+  resources :trades, except: [:edit, :update] do
+    collection do
+      get :stats
+    end
+  end
+  
+  # Dashboard
+  get 'dashboard', to: 'dashboard#index'
 end

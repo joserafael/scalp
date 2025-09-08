@@ -1,0 +1,157 @@
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Detalhes da Operação #<%= @trade.id %></h4>
+        <span class="badge bg-<%= @trade.status == 'open' ? 'warning' : 'success' %> fs-6">
+          <%= @trade.status == 'open' ? 'Aberta' : 'Pareada' %>
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="text-muted">Informações Básicas</h6>
+            <table class="table table-borderless">
+              <tr>
+                <td class="fw-bold">Criptomoeda:</td>
+                <td><%= @trade.cryptocurrency.name %></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Tipo:</td>
+                <td>
+                  <span class="badge bg-<%= @trade.operation_type == 'buy' ? 'success' : 'danger' %>">
+                    <%= @trade.operation_type == 'buy' ? 'Compra' : 'Venda' %>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Quantidade:</td>
+                <td><%= number_with_precision(@trade.quantity, precision: 8) %></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Preço:</td>
+                <td>$<%= number_with_precision(@trade.price, precision: 2) %></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Valor Total:</td>
+                <td class="fw-bold">$<%= number_with_precision(@trade.quantity * @trade.price, precision: 2) %></td>
+              </tr>
+            </table>
+          </div>
+          
+          <div class="col-md-6">
+            <h6 class="text-muted">Status e Datas</h6>
+            <table class="table table-borderless">
+              <tr>
+                <td class="fw-bold">Status:</td>
+                <td>
+                  <span class="badge bg-<%= @trade.status == 'open' ? 'warning' : 'success' %>">
+                    <%= @trade.status == 'open' ? 'Aberta' : 'Pareada' %>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Ativa:</td>
+                <td>
+                  <span class="badge bg-<%= @trade.active? ? 'success' : 'secondary' %>">
+                    <%= @trade.active? ? 'Sim' : 'Não' %>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Criada em:</td>
+                <td><%= @trade.created_at.strftime("%d/%m/%Y às %H:%M") %></td>
+              </tr>
+              <% if @trade.updated_at != @trade.created_at %>
+                <tr>
+                  <td class="fw-bold">Atualizada em:</td>
+                  <td><%= @trade.updated_at.strftime("%d/%m/%Y às %H:%M") %></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+        
+        <div class="d-flex gap-2 mt-3">
+          <%= link_to "Voltar", trades_path, class: "btn btn-secondary" %>
+          <% if @trade.status == 'open' %>
+            <%= link_to "Excluir", trade_path(@trade), 
+                method: :delete, 
+                class: "btn btn-danger",
+                confirm: "Tem certeza que deseja excluir esta operação?" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <!-- Pareamento (se existir) -->
+    <% if @trade.status == 'matched' %>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Pareamento</h5>
+        </div>
+        <div class="card-body">
+          <% pair = @trade.operation_type == 'buy' ? @trade.buy_pair : @trade.sell_pair %>
+          <% if pair %>
+            <% other_trade = @trade.operation_type == 'buy' ? pair.sell_trade : pair.buy_trade %>
+            <p><strong>Pareado com:</strong> Operação #<%= other_trade.id %></p>
+            <p><strong>Tipo do par:</strong> 
+              <span class="badge bg-<%= other_trade.operation_type == 'buy' ? 'success' : 'danger' %>">
+                <%= other_trade.operation_type == 'buy' ? 'Compra' : 'Venda' %>
+              </span>
+            </p>
+            <p><strong>Preço do par:</strong> $<%= number_with_precision(other_trade.price, precision: 2) %></p>
+            <% if pair.profit %>
+              <p><strong>Lucro:</strong> 
+                <span class="fw-bold text-<%= pair.profit >= 0 ? 'success' : 'danger' %>">
+                  $<%= number_with_precision(pair.profit, precision: 2) %>
+                </span>
+              </p>
+            <% end %>
+            <p><strong>Pareado em:</strong> <%= pair.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
+            
+            <%= link_to "Ver operação pareada", trade_path(other_trade), class: "btn btn-outline-primary btn-sm" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    
+    <!-- Operações similares -->
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="mb-0">Operações Similares</h5>
+      </div>
+      <div class="card-body">
+        <% similar_trades = Trade.joins(:cryptocurrency)
+                                 .where(cryptocurrency: @trade.cryptocurrency)
+                                 .where.not(id: @trade.id)
+                                 .where(status: 'open')
+                                 .order(created_at: :desc)
+                                 .limit(5) %>
+        
+        <% if similar_trades.any? %>
+          <% similar_trades.each do |trade| %>
+            <div class="border-bottom pb-2 mb-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="badge bg-<%= trade.operation_type == 'buy' ? 'success' : 'danger' %> me-1">
+                    <%= trade.operation_type == 'buy' ? 'C' : 'V' %>
+                  </span>
+                  <small>#<%= trade.id %></small>
+                </div>
+                <div class="text-end">
+                  <small class="d-block">$<%= number_with_precision(trade.price, precision: 2) %></small>
+                  <small class="text-muted"><%= trade.created_at.strftime("%d/%m") %></small>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted mb-0">Nenhuma operação similar encontrada.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,3 +10,14 @@ gem 'pg'
 gem 'puma'
 gem 'rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
+end
+
+group :test do
+  gem 'shoulda-matchers'
+  gem 'database_cleaner-active_record'
+end
