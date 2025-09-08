@@ -36,7 +36,12 @@ function setupTradeFormAjax(form) {
         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       }
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then(data => {
       if (data.status === 'success') {
         showAlert('success', data.message);
@@ -57,7 +62,7 @@ function setupTradeFormAjax(form) {
     })
     .catch(error => {
       console.error('Erro:', error);
-      showAlert('danger', 'Erro ao processar a requisição.');
+      showAlert('danger', '');
     })
     .finally(() => {
       // Restaurar botão
@@ -69,13 +74,23 @@ function setupTradeFormAjax(form) {
 
 function setupTradeDeleteAjax() {
   document.addEventListener('click', function(e) {
-    if (e.target.matches('a[data-method="delete"]')) {
+    // Check if the clicked element or its parent is a delete link
+    let link = e.target.closest('a[data-method="delete"]');
+    
+    if (link) {
       e.preventDefault();
+      e.stopPropagation();
       
-      const link = e.target;
       const confirmMessage = link.getAttribute('data-confirm');
       
       if (confirmMessage && !confirm(confirmMessage)) {
+        return;
+      }
+      
+      // Ensure we have a valid href with an ID
+      if (!link.href || link.href.endsWith('/trades')) {
+        console.error('Invalid delete URL:', link.href);
+        showAlert('danger', 'Erro: URL de exclusão inválida.');
         return;
       }
       
@@ -86,7 +101,12 @@ function setupTradeDeleteAjax() {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
         }
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.status === 'success') {
           showAlert('success', data.message);
@@ -118,7 +138,12 @@ function refreshStats() {
       'Accept': 'application/json'
     }
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     updateStatsDisplay(data);
   })
@@ -188,7 +213,12 @@ function refreshTradesList() {
       'Accept': 'application/json'
     }
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.trades) {
       updateTradesTable(data.trades);
